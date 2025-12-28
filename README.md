@@ -9,11 +9,11 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/yourusername/WinUSBCreator/releases/latest">
-    <img src="https://img.shields.io/github/v/release/yourusername/WinUSBCreator?style=flat-square" alt="Latest Release">
+  <a href="https://github.com/vcazan/WinUSBCreator/releases/latest">
+    <img src="https://img.shields.io/github/v/release/vcazan/WinUSBCreator?style=flat-square" alt="Latest Release">
   </a>
-  <a href="https://github.com/yourusername/WinUSBCreator/releases/latest">
-    <img src="https://img.shields.io/github/downloads/yourusername/WinUSBCreator/total?style=flat-square" alt="Downloads">
+  <a href="https://github.com/vcazan/WinUSBCreator/releases/latest">
+    <img src="https://img.shields.io/github/downloads/vcazan/WinUSBCreator/total?style=flat-square" alt="Downloads">
   </a>
   <img src="https://img.shields.io/badge/macOS-13.0%2B-blue?style=flat-square" alt="macOS 13.0+">
   <img src="https://img.shields.io/badge/license-MIT-green?style=flat-square" alt="MIT License">
@@ -39,7 +39,7 @@
 
 ### Download
 
-Download the latest version from the [Releases](https://github.com/yourusername/WinUSBCreator/releases/latest) page.
+Download the latest version from the [Releases](https://github.com/vcazan/WinUSBCreator/releases/latest) page.
 
 1. Download `WinUSBCreator.dmg`
 2. Open the DMG and drag the app to your Applications folder
@@ -48,7 +48,7 @@ Download the latest version from the [Releases](https://github.com/yourusername/
 ### Build from Source
 
 ```bash
-git clone https://github.com/yourusername/WinUSBCreator.git
+git clone https://github.com/vcazan/WinUSBCreator.git
 cd WinUSBCreator
 open WinUSBCreator/WinUSBCreator.xcodeproj
 ```
