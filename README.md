@@ -1,10 +1,6 @@
 # WinUSB Creator for Mac
 
 <p align="center">
-  <img src="docs/assets/icon.png" alt="WinUSB Creator" width="128" height="128">
-</p>
-
-<p align="center">
   <strong>Create bootable Windows 11 USB drives on macOS</strong>
 </p>
 
@@ -70,13 +66,6 @@ WinUSB Creator handles the complexities of creating a Windows bootable USB on ma
 - **Smart formatting** — Automatically chooses exFAT (for files >4GB) or FAT32
 - **File copying** — Streams large files with real-time progress updates
 - **UEFI compatible** — Creates GPT partition table for modern boot support
-
-## Screenshots
-
-<p align="center">
-  <img src="docs/assets/screenshot-1.png" alt="ISO Selection" width="400">
-  <img src="docs/assets/screenshot-2.png" alt="USB Selection" width="400">
-</p>
 
 ## FAQ
 
