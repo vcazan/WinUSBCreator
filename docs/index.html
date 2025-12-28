@@ -3,343 +3,604 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WinUSB Creator for Mac</title>
-    <meta name="description" content="Create bootable Windows 11 USB drives on macOS. Free, open-source, no external dependencies.">
+    <title>WinUSB Creator — Create Windows USB on Mac</title>
+    <meta name="description" content="The easiest way to create bootable Windows 11 USB drives on macOS. Free, open-source, no dependencies.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --bg: #0a0a0a;
-            --surface: #141414;
-            --border: #262626;
-            --text: #fafafa;
-            --text-secondary: #a1a1a1;
-            --accent: #3b82f6;
-            --accent-hover: #2563eb;
-        }
-        
-        * {
+        *, *::before, *::after {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            line-height: 1.6;
-            -webkit-font-smoothing: antialiased;
+
+        :root {
+            --bg-primary: #000000;
+            --bg-secondary: #0a0a0a;
+            --bg-card: rgba(255, 255, 255, 0.03);
+            --border: rgba(255, 255, 255, 0.08);
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.6);
+            --text-tertiary: rgba(255, 255, 255, 0.4);
+            --accent: #0071e3;
+            --accent-glow: rgba(0, 113, 227, 0.4);
+            --windows: #00a4ef;
+            --apple: #ffffff;
         }
-        
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            overflow-x: hidden;
+        }
+
+        /* Noise texture overlay */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.03;
+            pointer-events: none;
+            z-index: 1000;
+        }
+
         .container {
-            max-width: 800px;
+            max-width: 1100px;
             margin: 0 auto;
             padding: 0 24px;
         }
-        
-        /* Hero */
+
+        /* Hero Section */
         .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
             text-align: center;
-            padding: 120px 24px 80px;
+            padding: 80px 24px;
+            position: relative;
         }
-        
-        .hero-icon {
-            width: 120px;
-            height: 120px;
-            margin-bottom: 32px;
-            border-radius: 24px;
-            background: linear-gradient(135deg, #1e3a5f 0%, #0f172a 100%);
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+            opacity: 0.3;
+            pointer-events: none;
+        }
+
+        .badge {
             display: inline-flex;
             align-items: center;
-            justify-content: center;
-            font-size: 56px;
+            gap: 8px;
+            padding: 8px 16px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 100px;
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+            backdrop-filter: blur(10px);
         }
-        
+
+        .badge-dot {
+            width: 6px;
+            height: 6px;
+            background: #22c55e;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
         .hero h1 {
-            font-size: 48px;
+            font-size: clamp(48px, 10vw, 80px);
             font-weight: 700;
-            letter-spacing: -0.02em;
-            margin-bottom: 16px;
+            letter-spacing: -0.03em;
+            line-height: 1.1;
+            margin-bottom: 24px;
+            background: linear-gradient(180deg, #ffffff 0%, rgba(255,255,255,0.7) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
-        
+
         .hero p {
             font-size: 20px;
             color: var(--text-secondary);
-            max-width: 500px;
-            margin: 0 auto 40px;
+            max-width: 480px;
+            margin-bottom: 48px;
+            line-height: 1.6;
         }
-        
-        .download-btn {
+
+        .cta-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .btn-primary {
             display: inline-flex;
             align-items: center;
             gap: 12px;
+            padding: 18px 36px;
             background: var(--accent);
             color: white;
-            padding: 16px 32px;
-            border-radius: 12px;
-            text-decoration: none;
+            font-size: 17px;
             font-weight: 600;
-            font-size: 16px;
-            transition: background 0.2s, transform 0.2s;
+            text-decoration: none;
+            border-radius: 14px;
+            transition: all 0.2s ease;
+            box-shadow: 0 0 0 1px rgba(255,255,255,0.1) inset, 0 4px 24px var(--accent-glow);
         }
-        
-        .download-btn:hover {
-            background: var(--accent-hover);
+
+        .btn-primary:hover {
             transform: translateY(-2px);
+            box-shadow: 0 0 0 1px rgba(255,255,255,0.2) inset, 0 8px 32px var(--accent-glow);
         }
-        
-        .download-btn svg {
+
+        .btn-primary svg {
             width: 20px;
             height: 20px;
         }
-        
-        .version-info {
-            margin-top: 16px;
+
+        .meta {
+            display: flex;
+            align-items: center;
+            gap: 24px;
             font-size: 14px;
-            color: var(--text-secondary);
+            color: var(--text-tertiary);
         }
-        
-        /* Features */
-        .features {
-            padding: 80px 24px;
-            border-top: 1px solid var(--border);
+
+        .meta span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
-        
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 32px;
+
+        /* App Preview */
+        .preview {
+            margin-top: 80px;
+            position: relative;
         }
-        
-        .feature {
-            padding: 24px;
-            background: var(--surface);
-            border-radius: 16px;
+
+        .preview-window {
+            background: linear-gradient(180deg, #1a1a1a 0%, #0d0d0d 100%);
             border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 40px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.05) inset;
         }
-        
-        .feature-icon {
-            font-size: 32px;
-            margin-bottom: 16px;
+
+        .preview-titlebar {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 16px 20px;
+            background: rgba(255,255,255,0.02);
+            border-bottom: 1px solid var(--border);
         }
-        
-        .feature h3 {
-            font-size: 18px;
+
+        .preview-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .preview-dot.red { background: #ff5f57; }
+        .preview-dot.yellow { background: #febc2e; }
+        .preview-dot.green { background: #28c840; }
+
+        .preview-content {
+            padding: 60px 40px;
+            text-align: center;
+        }
+
+        .preview-icon {
+            font-size: 64px;
+            margin-bottom: 24px;
+        }
+
+        .preview-title {
+            font-size: 20px;
             font-weight: 600;
             margin-bottom: 8px;
         }
-        
-        .feature p {
+
+        .preview-subtitle {
             font-size: 14px;
             color: var(--text-secondary);
+            margin-bottom: 32px;
         }
-        
-        /* Steps */
-        .steps {
-            padding: 80px 24px;
-            border-top: 1px solid var(--border);
+
+        .preview-button {
+            display: inline-block;
+            padding: 12px 24px;
+            background: var(--accent);
+            color: white;
+            font-size: 14px;
+            font-weight: 500;
+            border-radius: 8px;
         }
-        
-        .steps h2 {
-            text-align: center;
-            font-size: 32px;
-            margin-bottom: 48px;
+
+        /* Features */
+        .features {
+            padding: 160px 24px;
         }
-        
-        .steps-grid {
+
+        .section-label {
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--accent);
+            margin-bottom: 16px;
+        }
+
+        .section-title {
+            font-size: clamp(32px, 5vw, 48px);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-bottom: 64px;
+            max-width: 600px;
+        }
+
+        .features-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 24px;
         }
-        
-        @media (max-width: 640px) {
-            .steps-grid {
+
+        @media (max-width: 768px) {
+            .features-grid {
                 grid-template-columns: 1fr;
             }
         }
-        
-        .step {
-            text-align: center;
-            padding: 32px 24px;
+
+        .feature-card {
+            padding: 32px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            transition: all 0.3s ease;
         }
-        
-        .step-number {
+
+        .feature-card:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.12);
+            transform: translateY(-4px);
+        }
+
+        .feature-icon {
             width: 48px;
             height: 48px;
-            background: var(--surface);
-            border: 2px solid var(--border);
-            border-radius: 50%;
-            display: inline-flex;
+            display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: 600;
-            font-size: 18px;
+            background: linear-gradient(135deg, var(--accent) 0%, #0055aa 100%);
+            border-radius: 12px;
+            font-size: 24px;
             margin-bottom: 20px;
         }
-        
-        .step h3 {
+
+        .feature-card h3 {
             font-size: 18px;
+            font-weight: 600;
             margin-bottom: 8px;
         }
-        
+
+        .feature-card p {
+            font-size: 15px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Steps */
+        .steps {
+            padding: 80px 24px 160px;
+        }
+
+        .steps-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 48px;
+            margin-top: 64px;
+        }
+
+        @media (max-width: 768px) {
+            .steps-container {
+                grid-template-columns: 1fr;
+                gap: 32px;
+            }
+        }
+
+        .step {
+            position: relative;
+        }
+
+        .step-number {
+            font-size: 72px;
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.05);
+            line-height: 1;
+            margin-bottom: 16px;
+        }
+
+        .step h3 {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
         .step p {
-            font-size: 14px;
+            font-size: 15px;
             color: var(--text-secondary);
         }
-        
+
         /* Requirements */
         .requirements {
             padding: 80px 24px;
+            background: var(--bg-secondary);
             border-top: 1px solid var(--border);
-        }
-        
-        .requirements h2 {
-            text-align: center;
-            font-size: 32px;
-            margin-bottom: 32px;
-        }
-        
-        .requirements-list {
-            max-width: 480px;
-            margin: 0 auto;
-        }
-        
-        .requirement {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            padding: 16px 0;
             border-bottom: 1px solid var(--border);
         }
-        
-        .requirement:last-child {
-            border-bottom: none;
+
+        .req-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 32px;
+            margin-top: 48px;
         }
-        
-        .requirement-icon {
-            width: 40px;
-            height: 40px;
-            background: var(--surface);
-            border-radius: 10px;
+
+        @media (max-width: 768px) {
+            .req-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .req-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+        }
+
+        .req-icon {
+            width: 44px;
+            height: 44px;
             display: flex;
             align-items: center;
             justify-content: center;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
             font-size: 20px;
+            flex-shrink: 0;
         }
-        
-        .requirement-text h4 {
+
+        .req-item h4 {
             font-size: 15px;
-            font-weight: 500;
+            font-weight: 600;
+            margin-bottom: 4px;
         }
-        
-        .requirement-text p {
-            font-size: 13px;
+
+        .req-item p {
+            font-size: 14px;
             color: var(--text-secondary);
         }
-        
+
+        .req-item a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .req-item a:hover {
+            text-decoration: underline;
+        }
+
+        /* CTA */
+        .cta {
+            padding: 160px 24px;
+            text-align: center;
+        }
+
+        .cta h2 {
+            font-size: clamp(36px, 6vw, 56px);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-bottom: 24px;
+        }
+
+        .cta p {
+            font-size: 18px;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+        }
+
         /* Footer */
         footer {
             padding: 40px 24px;
             border-top: 1px solid var(--border);
             text-align: center;
-            color: var(--text-secondary);
+        }
+
+        footer p {
             font-size: 14px;
+            color: var(--text-tertiary);
         }
-        
+
         footer a {
-            color: var(--text);
+            color: var(--text-secondary);
             text-decoration: none;
+            transition: color 0.2s;
         }
-        
+
         footer a:hover {
-            text-decoration: underline;
+            color: var(--text-primary);
         }
+
+        /* Animations */
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero > * {
+            animation: fadeUp 0.8s ease forwards;
+        }
+
+        .hero > *:nth-child(1) { animation-delay: 0.1s; }
+        .hero > *:nth-child(2) { animation-delay: 0.2s; }
+        .hero > *:nth-child(3) { animation-delay: 0.3s; }
+        .hero > *:nth-child(4) { animation-delay: 0.4s; }
+        .hero > *:nth-child(5) { animation-delay: 0.5s; }
     </style>
 </head>
 <body>
     <section class="hero">
-        <div class="container">
-            <div class="hero-icon">💿</div>
-            <h1>WinUSB Creator</h1>
-            <p>Create bootable Windows 11 USB drives on your Mac. Simple, fast, and completely free.</p>
-            <a href="https://github.com/vcazan/WinUSBCreator/releases/latest/download/WinUSBCreator.dmg" class="download-btn">
+        <div class="badge">
+            <span class="badge-dot"></span>
+            Free & Open Source
+        </div>
+        
+        <h1>Windows USB<br>for Mac</h1>
+        
+        <p>Create bootable Windows 11 USB drives on your Mac in minutes. No terminal, no dependencies, just works.</p>
+        
+        <div class="cta-group">
+            <a href="https://github.com/vcazan/WinUSBCreator/releases/latest/download/WinUSBCreator.dmg" class="btn-primary">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
                 </svg>
-                Download for Mac
+                Download for macOS
             </a>
-            <p class="version-info">Version 1.0.0 · macOS 13.0+ · Apple Silicon & Intel</p>
+            
+            <div class="meta">
+                <span>v1.0.0</span>
+                <span>•</span>
+                <span>macOS 13+</span>
+                <span>•</span>
+                <span>Apple Silicon & Intel</span>
+            </div>
+        </div>
+
+        <div class="preview">
+            <div class="preview-window">
+                <div class="preview-titlebar">
+                    <span class="preview-dot red"></span>
+                    <span class="preview-dot yellow"></span>
+                    <span class="preview-dot green"></span>
+                </div>
+                <div class="preview-content">
+                    <div class="preview-icon">💿</div>
+                    <div class="preview-title">Select Windows ISO</div>
+                    <div class="preview-subtitle">Choose a Windows 11 ISO file to create your installer</div>
+                    <div class="preview-button">Choose ISO...</div>
+                </div>
+            </div>
         </div>
     </section>
-    
+
     <section class="features">
         <div class="container">
+            <div class="section-label">Features</div>
+            <h2 class="section-title">Everything you need. Nothing you don't.</h2>
+            
             <div class="features-grid">
-                <div class="feature">
+                <div class="feature-card">
                     <div class="feature-icon">⚡</div>
-                    <h3>Fast & Simple</h3>
-                    <p>Three-step process. Select your ISO, pick a USB drive, and you're done.</p>
+                    <h3>Dead Simple</h3>
+                    <p>Three steps: pick ISO, pick USB, click create. That's it. No command line, no configuration.</p>
                 </div>
-                <div class="feature">
+                
+                <div class="feature-card">
                     <div class="feature-icon">📦</div>
-                    <h3>No Dependencies</h3>
-                    <p>Everything built-in. No Homebrew, no Terminal commands, no hassle.</p>
+                    <h3>Zero Dependencies</h3>
+                    <p>No Homebrew, no wimlib, no third-party tools. Everything is built right into the app.</p>
                 </div>
-                <div class="feature">
+                
+                <div class="feature-card">
                     <div class="feature-icon">🔧</div>
-                    <h3>Just Works</h3>
-                    <p>Automatically handles large files, formatting, and UEFI boot compatibility.</p>
+                    <h3>Smart Formatting</h3>
+                    <p>Automatically handles large files with exFAT, or uses FAT32 for maximum compatibility.</p>
                 </div>
             </div>
         </div>
     </section>
-    
+
     <section class="steps">
         <div class="container">
-            <h2>How It Works</h2>
-            <div class="steps-grid">
+            <div class="section-label">How it works</div>
+            <h2 class="section-title">Ready in three steps</h2>
+            
+            <div class="steps-container">
                 <div class="step">
-                    <div class="step-number">1</div>
-                    <h3>Select ISO</h3>
-                    <p>Choose your Windows 11 ISO file or drag and drop it onto the app.</p>
+                    <div class="step-number">01</div>
+                    <h3>Select your ISO</h3>
+                    <p>Choose your Windows 11 ISO file. Drag and drop or click to browse.</p>
                 </div>
+                
                 <div class="step">
-                    <div class="step-number">2</div>
-                    <h3>Pick USB Drive</h3>
+                    <div class="step-number">02</div>
+                    <h3>Pick your USB</h3>
                     <p>Select your USB drive from the list. Make sure it's at least 8GB.</p>
                 </div>
+                
                 <div class="step">
-                    <div class="step-number">3</div>
-                    <h3>Create Installer</h3>
-                    <p>Click Create and wait. Your bootable Windows USB will be ready in minutes.</p>
+                    <div class="step-number">03</div>
+                    <h3>Create installer</h3>
+                    <p>Click create and wait. Your bootable USB will be ready in minutes.</p>
                 </div>
             </div>
         </div>
     </section>
-    
+
     <section class="requirements">
         <div class="container">
-            <h2>Requirements</h2>
-            <div class="requirements-list">
-                <div class="requirement">
-                    <div class="requirement-icon">💻</div>
-                    <div class="requirement-text">
-                        <h4>macOS 13.0 or later</h4>
+            <div class="section-label">Requirements</div>
+            <h2 class="section-title">What you need</h2>
+            
+            <div class="req-grid">
+                <div class="req-item">
+                    <div class="req-icon">💻</div>
+                    <div>
+                        <h4>macOS 13.0+</h4>
                         <p>Ventura, Sonoma, or Sequoia</p>
                     </div>
                 </div>
-                <div class="requirement">
-                    <div class="requirement-icon">💿</div>
-                    <div class="requirement-text">
+                
+                <div class="req-item">
+                    <div class="req-icon">💿</div>
+                    <div>
                         <h4>Windows 11 ISO</h4>
-                        <p><a href="https://www.microsoft.com/software-download/windows11" target="_blank">Download from Microsoft</a></p>
+                        <p><a href="https://www.microsoft.com/software-download/windows11" target="_blank">Download from Microsoft →</a></p>
                     </div>
                 </div>
-                <div class="requirement">
-                    <div class="requirement-icon">🔌</div>
-                    <div class="requirement-text">
+                
+                <div class="req-item">
+                    <div class="req-icon">🔌</div>
+                    <div>
                         <h4>USB Drive</h4>
                         <p>8GB or larger recommended</p>
                     </div>
@@ -347,7 +608,20 @@
             </div>
         </div>
     </section>
-    
+
+    <section class="cta">
+        <div class="container">
+            <h2>Ready to create your<br>Windows USB?</h2>
+            <p>Download WinUSB Creator and get started in seconds.</p>
+            <a href="https://github.com/vcazan/WinUSBCreator/releases/latest/download/WinUSBCreator.dmg" class="btn-primary">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                </svg>
+                Download for macOS
+            </a>
+        </div>
+    </section>
+
     <footer>
         <div class="container">
             <p>
@@ -359,4 +633,3 @@
     </footer>
 </body>
 </html>
-
