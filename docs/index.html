@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WinUSB Creator for Mac</title>
+    <meta name="description" content="Create bootable Windows 11 USB drives on macOS. Free, open-source, no external dependencies.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0a0a0a;
+            --surface: #141414;
+            --border: #262626;
+            --text: #fafafa;
+            --text-secondary: #a1a1a1;
+            --accent: #3b82f6;
+            --accent-hover: #2563eb;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+        
+        /* Hero */
+        .hero {
+            text-align: center;
+            padding: 120px 24px 80px;
+        }
+        
+        .hero-icon {
+            width: 120px;
+            height: 120px;
+            margin-bottom: 32px;
+            border-radius: 24px;
+            background: linear-gradient(135deg, #1e3a5f 0%, #0f172a 100%);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 56px;
+        }
+        
+        .hero h1 {
+            font-size: 48px;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-bottom: 16px;
+        }
+        
+        .hero p {
+            font-size: 20px;
+            color: var(--text-secondary);
+            max-width: 500px;
+            margin: 0 auto 40px;
+        }
+        
+        .download-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            background: var(--accent);
+            color: white;
+            padding: 16px 32px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 16px;
+            transition: background 0.2s, transform 0.2s;
+        }
+        
+        .download-btn:hover {
+            background: var(--accent-hover);
+            transform: translateY(-2px);
+        }
+        
+        .download-btn svg {
+            width: 20px;
+            height: 20px;
+        }
+        
+        .version-info {
+            margin-top: 16px;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+        
+        /* Features */
+        .features {
+            padding: 80px 24px;
+            border-top: 1px solid var(--border);
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 32px;
+        }
+        
+        .feature {
+            padding: 24px;
+            background: var(--surface);
+            border-radius: 16px;
+            border: 1px solid var(--border);
+        }
+        
+        .feature-icon {
+            font-size: 32px;
+            margin-bottom: 16px;
+        }
+        
+        .feature h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        .feature p {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+        
+        /* Steps */
+        .steps {
+            padding: 80px 24px;
+            border-top: 1px solid var(--border);
+        }
+        
+        .steps h2 {
+            text-align: center;
+            font-size: 32px;
+            margin-bottom: 48px;
+        }
+        
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+        
+        @media (max-width: 640px) {
+            .steps-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .step {
+            text-align: center;
+            padding: 32px 24px;
+        }
+        
+        .step-number {
+            width: 48px;
+            height: 48px;
+            background: var(--surface);
+            border: 2px solid var(--border);
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+        
+        .step h3 {
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+        
+        .step p {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+        
+        /* Requirements */
+        .requirements {
+            padding: 80px 24px;
+            border-top: 1px solid var(--border);
+        }
+        
+        .requirements h2 {
+            text-align: center;
+            font-size: 32px;
+            margin-bottom: 32px;
+        }
+        
+        .requirements-list {
+            max-width: 480px;
+            margin: 0 auto;
+        }
+        
+        .requirement {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px 0;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .requirement:last-child {
+            border-bottom: none;
+        }
+        
+        .requirement-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--surface);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+        
+        .requirement-text h4 {
+            font-size: 15px;
+            font-weight: 500;
+        }
+        
+        .requirement-text p {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+        
+        /* Footer */
+        footer {
+            padding: 40px 24px;
+            border-top: 1px solid var(--border);
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+        
+        footer a {
+            color: var(--text);
+            text-decoration: none;
+        }
+        
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <section class="hero">
+        <div class="container">
+            <div class="hero-icon">💿</div>
+            <h1>WinUSB Creator</h1>
+            <p>Create bootable Windows 11 USB drives on your Mac. Simple, fast, and completely free.</p>
+            <a href="https://github.com/yourusername/WinUSBCreator/releases/latest/download/WinUSBCreator.dmg" class="download-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                </svg>
+                Download for Mac
+            </a>
+            <p class="version-info">Version 1.0.0 · macOS 13.0+ · Apple Silicon & Intel</p>
+        </div>
+    </section>
+    
+    <section class="features">
+        <div class="container">
+            <div class="features-grid">
+                <div class="feature">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Fast & Simple</h3>
+                    <p>Three-step process. Select your ISO, pick a USB drive, and you're done.</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">📦</div>
+                    <h3>No Dependencies</h3>
+                    <p>Everything built-in. No Homebrew, no Terminal commands, no hassle.</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">🔧</div>
+                    <h3>Just Works</h3>
+                    <p>Automatically handles large files, formatting, and UEFI boot compatibility.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="steps">
+        <div class="container">
+            <h2>How It Works</h2>
+            <div class="steps-grid">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Select ISO</h3>
+                    <p>Choose your Windows 11 ISO file or drag and drop it onto the app.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Pick USB Drive</h3>
+                    <p>Select your USB drive from the list. Make sure it's at least 8GB.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Create Installer</h3>
+                    <p>Click Create and wait. Your bootable Windows USB will be ready in minutes.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="requirements">
+        <div class="container">
+            <h2>Requirements</h2>
+            <div class="requirements-list">
+                <div class="requirement">
+                    <div class="requirement-icon">💻</div>
+                    <div class="requirement-text">
+                        <h4>macOS 13.0 or later</h4>
+                        <p>Ventura, Sonoma, or Sequoia</p>
+                    </div>
+                </div>
+                <div class="requirement">
+                    <div class="requirement-icon">💿</div>
+                    <div class="requirement-text">
+                        <h4>Windows 11 ISO</h4>
+                        <p><a href="https://www.microsoft.com/software-download/windows11" target="_blank">Download from Microsoft</a></p>
+                    </div>
+                </div>
+                <div class="requirement">
+                    <div class="requirement-icon">🔌</div>
+                    <div class="requirement-text">
+                        <h4>USB Drive</h4>
+                        <p>8GB or larger recommended</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <footer>
+        <div class="container">
+            <p>
+                Open source on <a href="https://github.com/yourusername/WinUSBCreator">GitHub</a> · 
+                MIT License · 
+                Made for the Mac community
+            </p>
+        </div>
+    </footer>
+</body>
+</html>
+
